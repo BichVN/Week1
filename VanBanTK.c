@@ -13,6 +13,7 @@ typedef char AWord[MAX];
 AWord stopList[MAX];
 int   stopCount=0;
 int headLine = 1;
+int is_space(int ch) ;
 int find(AWord word,AWord *stopList,int stopCount);// tim tu trong mang char co trong danh sach stop khong
 int isExist(char *word,AWord* wordList, int wordListNum);
 void wordProcess(char *word, int line,AWord* wordList,wordPosL_t *wordPos, int *wordListNum);
@@ -43,10 +44,13 @@ int main(){
     while (fscanf(f2,"%s",stopWord)!=-1)
         strcpy(stopList[stopCount++], stopWord);
 
-    //Read vanban
+    //Read vanban 
     while (fscanf(f1,"%c",&letter)!=-1){
 
-        if (((letter!='\n')&&(letter!=' '))&&(letter!='\r')&&(letter!='.')){ 
+      //if (((letter!='\n')&&(letter!=' '))&&(letter!='\r')&&(letter!='.'))
+      
+      if(!is_space((int)letter))
+	  { 
 	    n         = strlen(word);
             word[n]   = letter;
             word[n+1] = '\0';
@@ -68,8 +72,9 @@ int main(){
 
     int i;
     sort(wordList,wordPos,wordListNum);
+    //printf("%40s",'-');
     for (i=0;i<wordListNum;i++){
-      printf("%s ",wordList[i]);
+      printf("%20s",wordList[i]);
       printList(&wordPos[i]);
       printf("\n");
        
@@ -143,12 +148,13 @@ void printList(wordPosL_t *root){
         root = root->next;
     }
 
-   printf("%d ",wordCount);
+   printf("%10d",wordCount);
 
     while (cur!=NULL){
-      printf("%d ",cur->value);
+      printf("%10d ",cur->value);
         cur = cur->next;
     }
+    
 }
 
 void swapwordPos(wordPosL_t *a,wordPosL_t *b){
@@ -178,3 +184,22 @@ int find(AWord word,AWord *stopList,int stopCount){
             return 1;
     return 0;
 }
+int is_space(int ch) 
+{ 
+    return (ch==' ' || ch==';' ||  
+            ch==':' || ch=='"' ||  
+            ch=='.' || ch==',' ||  
+            ch=='\t'|| ch=='\n'||  
+            ch=='`' || ch=='~' || 
+            ch=='!' || ch=='@' ||  
+            ch=='#' || ch=='$' ||  
+            ch=='%' || ch=='^' ||  
+            ch=='&' || ch=='*' ||  
+            ch=='(' || ch==')' ||  
+            ch=='[' || ch==']' ||  
+            ch=='{' || ch=='}' ||  
+            ch=='+' || ch=='?' ||  
+            ch=='*' || ch=='/' ||  
+            ch==39|| 
+            (ch>=48 && ch<=57)); 
+} 
